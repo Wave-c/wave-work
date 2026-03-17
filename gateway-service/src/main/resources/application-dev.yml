@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://192.168.1.10:8081/.well-known/jwks.json
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+          - id: test
+            uri: http://192.168.1.10:8099
+            predicates:
+            - Path=/test/**
+            filters:
+            - StripPrefix=1
+          - id: auth
+            uri: http://192.168.1.10:8081
+            predicates:
+            - Path=/auth/**
+            filters:
+            - StripPrefix=1

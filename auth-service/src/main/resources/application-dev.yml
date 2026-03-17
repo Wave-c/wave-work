@@ -1,0 +1,19 @@
+spring:
+  config:
+    activate:
+      on-profile:
+      - dev
+  redis:
+    refresh-token-storage:
+      host: 192.168.1.10
+      port: 6379
+
+server:
+  port: 8081
+
+jwt:
+  private-key-file: keys/private.pem
+  public-key-file: keys/public.pem
+  issuer: http://192.168.1.10:8081
+  audience: gateway
+  token-expiration-seconds: 3600

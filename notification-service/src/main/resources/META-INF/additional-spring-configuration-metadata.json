@@ -1,0 +1,22 @@
+{"properties": [
+  {
+    "name": "unleash.api-url",
+    "type": "java.lang.String",
+    "description": "A description for 'unleash.api-url'"
+  },
+  {
+    "name": "unleash.api-token",
+    "type": "java.lang.String",
+    "description": "A description for 'unleash.api-token'"
+  },
+  {
+    "name": "unleash.instance-id",
+    "type": "java.lang.String",
+    "description": "A description for 'unleash.instance-id'"
+  },
+  {
+    "name": "unleash.app-name",
+    "type": "java.lang.String",
+    "description": "A description for 'unleash.app-name'"
+  }
+]}

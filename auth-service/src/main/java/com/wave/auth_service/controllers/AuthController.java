@@ -1,0 +1,102 @@
+package com.wave.auth_service.controllers;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ServerWebExchange;
+
+import com.wave.auth_service.dtos.LoginRequest;
+import com.wave.auth_service.services.JwtService;
+import com.wave.auth_service.services.RefreshTokenStorageService;
+
+import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Mono;
+
+import java.time.Duration;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpCookie;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseCookie.ResponseCookieBuilder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/auth")
+public class AuthController {
+    private final RefreshTokenStorageService refreshTokenStorageService;
+    private final JwtService jwtService;
+
+    @Value("${spring.profiles.active:default}")
+    private String activeProfile;
+
+    @PostMapping("/login")
+    public Mono<ResponseEntity<Map<String, String>>> login(
+        @RequestBody LoginRequest request,
+        ServerWebExchange exchange) {
+        UUID userId = UUID.randomUUID();
+
+        return Mono.zip(
+            jwtService.generateAccessToken(userId, List.of("USER")),
+            jwtService.generateRefreshToken(userId))
+            .map(tupple -> {
+                ResponseCookie accessCookie =
+                    buildCookie("access_token", tupple.getT1(),
+                        Duration.ofMinutes(15));
+                ResponseCookie refreshCookie =
+                    buildCookie("refresh_token", tupple.getT2(),
+                        Duration.ofDays(7));
+                exchange.getResponse().addCookie(accessCookie);
+                exchange.getResponse().addCookie(refreshCookie);
+
+                return ResponseEntity.ok(
+                    Map.of("userId", userId.toString())
+                );
+            });
+    }
+
+    @PostMapping("/refresh")
+    public Mono<ResponseEntity<Void>> refresh(ServerWebExchange exchange) {
+        HttpCookie refreshCookie =
+            exchange.getRequest().getCookies().getFirst("refresh_token");
+
+        if (refreshCookie == null) {
+            return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .build());
+        }
+
+        return refreshTokenStorageService.getUserId(refreshCookie.getValue())
+            .flatMap(userId -> jwtService.generateAccessToken(
+                    userId, List.of("USER"))
+                    .flatMap(newAccess -> {
+                        ResponseCookie accessCookie =
+                            buildCookie("access_token", newAccess,
+                                Duration.ofMinutes(15));
+                        exchange.getResponse().addCookie(accessCookie);
+
+                        return Mono.just(ResponseEntity.ok().build());
+                    })
+
+            );
+    }
+
+
+    private ResponseCookie buildCookie(String name, String value, Duration maxAge) {
+        ResponseCookieBuilder builder = ResponseCookie.from(name, value)
+            .path("/")
+            .sameSite("Strict")
+            .maxAge(maxAge);
+
+        if ("prod".equals(activeProfile)) {
+            builder.secure(true).httpOnly(true);
+        }
+
+        return builder.build();
+    }
+}

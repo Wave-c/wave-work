@@ -1,0 +1,5 @@
+unleash:
+    api-url: http://192.168.1.10:4242/api/
+    api-token: "*:*.default-token"
+    instance-id: my-spring-app
+    app-name: notification-service
