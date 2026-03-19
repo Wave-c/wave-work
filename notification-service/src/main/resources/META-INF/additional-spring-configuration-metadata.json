@@ -1,22 +1,22 @@
 {"properties": [
   {
-    "name": "unleash.api-url",
+    "name": "telegram.token",
     "type": "java.lang.String",
-    "description": "A description for 'unleash.api-url'"
+    "description": "A description for 'telegram.token'"
   },
   {
-    "name": "unleash.api-token",
+    "name": "telegram.username",
     "type": "java.lang.String",
-    "description": "A description for 'unleash.api-token'"
+    "description": "A description for 'telegram.username'"
   },
   {
-    "name": "unleash.instance-id",
+    "name": "telegram.webhook-path",
     "type": "java.lang.String",
-    "description": "A description for 'unleash.instance-id'"
+    "description": "A description for 'telegram.webhook-path'"
   },
   {
-    "name": "unleash.app-name",
+    "name": "telegram.webhook-secret-token",
     "type": "java.lang.String",
-    "description": "A description for 'unleash.app-name'"
+    "description": "A description for 'telegram.webhook-secret-token'"
   }
 ]}

@@ -1,5 +1,16 @@
-unleash:
-    api-url: http://192.168.1.10:4242/api/
+io:
+  getunleash:
     api-token: "*:*.default-token"
-    instance-id: my-spring-app
-    app-name: notification-service
+    api-url: http://192.168.1.10:4242/api/
+    instance-id: "my-spring-app"
+    app-name: "notification-service"
+    synchronous-fetch-on-initialisation: true
+
+telegram:
+  token: 8564756319:AAEB7-V723UjxBTuAcVxTEyksIHh8PlgYSg
+  username: wave_work_bot
+  webhook-path: https://f3d8-192-124-209-165.ngrok-free.app/
+  webhook-secret-token: 2168b7e4-a3f7-4bdd-8250-a03bd6df5c69
+
+server:
+  port: 8077

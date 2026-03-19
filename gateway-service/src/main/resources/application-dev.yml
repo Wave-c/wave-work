@@ -24,3 +24,24 @@ spring:
             - Path=/auth/**
             filters:
             - StripPrefix=1
+          - id: telegram-api
+            uri: https://api.telegram.org
+            predicates:
+            - Path=/telegram/**
+            filters:
+            - StripPrefix=1
+            - name: Retry
+              args:
+                retries: 5
+                statuses: BAD_GATEWAY, GATEWAY_TIMEOUT, SERVICE_UNAVAILABLE
+                methods: POST, GET
+                backoff:
+                  firstBackoff: 1s
+                  maxBackoff: 5s
+                  factor: 2
+          - id: telegram-webhook-inbound
+            uri: http://192.168.1.10:8077
+            predicates:
+            - Path=/callback/message
+            - Method=POST
+            - Header=X-Telegram-Bot-Api-Secret-Token, 2168b7e4-a3f7-4bdd-8250-a03bd6df5c69
