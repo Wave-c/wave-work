@@ -27,6 +27,24 @@ services:
       timeout: 5s
       retries: 10
 
+  notification-db:
+    image: postgres:16
+    container_name: notification-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: notification_db
+      POSTGRES_USER: wave
+      POSTGRES_PASSWORD: Den1234567890/
+    ports:
+      - "5433:5432"
+    volumes:
+      - notification_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U notification_user -d notification_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   unleash:
     image: unleashorg/unleash-server:latest
     ports:
@@ -62,6 +80,13 @@ services:
       - unleash
       - ssl-gen
 
+  single-use-links:
+    image: redis:latest
+    container_name: single-use-links
+    ports:
+      - "6376:6379"
+    volumes:
+      - single_use_links_data:/data
 
   ngrok:
     image: ngrok/ngrok:latest
@@ -69,8 +94,10 @@ services:
       - "http"
       - "192.168.1.10:8080"
     environment:
-      NGROK_AUTHTOKEN:
+      NGROK_AUTHTOKEN: 2WXmuqkxIU6DbfUctoWa31SrKQ0_6oTqYhCS5rozNTsoojmHc
     ports:
       - "4040:4040"
 volumes:
   refresh_token_storage_data:
+  notification_db_data:
+  single_use_links_data:

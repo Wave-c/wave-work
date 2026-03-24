@@ -19,6 +19,9 @@ public class TelegramController {
     @PostMapping("/message")
     public Mono<ResponseEntity<Void>> updateReceived(@RequestBody Update update) {
         log.info("Received update");
+        if (update.getMessage().getText() == "/start") {
+
+        }
         return Mono.just(ResponseEntity.ok().build());
     }
 

@@ -32,7 +32,14 @@ public class NotificationSenderService {
         return Flux.fromIterable(senders)
             .filter(sender -> sender.supports(context))
             .next()
-            .switchIfEmpty(Mono.error(new RuntimeException("No sender found for notification")))
+            .switchIfEmpty(Mono.defer(() -> {
+                log.warn("No sender found for notification {} to user {}",
+                    notification.getType(),
+                    notification.getRecipient().getId());
+                return Mono.error(
+                    new RuntimeException(
+                        "No sender found for notification"));
+            }))
             .flatMap(sender -> sender.send(notification.getRecipient(),
                 notification.getType().getMessage().formatted("some task")));
     }

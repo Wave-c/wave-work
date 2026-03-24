@@ -1,3 +1,19 @@
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://192.168.1.10:5433/notification_db
+    username: wave
+    password: Den1234567890/
+  flyway:
+    url: jdbc:postgresql://192.168.1.10:5433/notification_db
+    locations: classpath:db/migration
+    user: wave
+    password: Den1234567890/
+    enabled: true
+  data:
+    redis:
+      host: 192.168.1.10
+      port: 6378
+
 io:
   getunleash:
     api-token: "*:*.default-token"
@@ -9,7 +25,7 @@ io:
 telegram:
   token: 8564756319:AAEB7-V723UjxBTuAcVxTEyksIHh8PlgYSg
   username: wave_work_bot
-  webhook-path: https://f3d8-192-124-209-165.ngrok-free.app/
+  webhook-path: https://66d2-192-124-209-165.ngrok-free.app/
   webhook-secret-token: 2168b7e4-a3f7-4bdd-8250-a03bd6df5c69
 
 server:
