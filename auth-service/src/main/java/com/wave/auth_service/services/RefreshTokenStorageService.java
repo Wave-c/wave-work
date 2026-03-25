@@ -45,4 +45,12 @@ public class RefreshTokenStorageService {
     public Mono<UUID> getUserId(String token) {
         return valueOps.get(getKey(token)).map(UUID::fromString);
     }
+
+    public Mono<Boolean> delete(String token) {
+        if (token == null || token.isEmpty()) {
+            return Mono.just(false);
+        }
+
+        return valueOps.delete(getKey(token));
+    }
 }

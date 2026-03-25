@@ -1,4 +1,14 @@
 spring:
+  r2dbc:
+    url: r2dbc:postgresql://192.168.1.10:5434/auth_db
+    username: wave
+    password: Den1234567890/
+  flyway:
+    url: jdbc:postgresql://192.168.1.10:5434/auth_db
+    locations: classpath:db/migration
+    user: wave
+    password: Den1234567890/
+    enabled: true
   config:
     activate:
       on-profile:

@@ -44,6 +44,23 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  auth-db:
+    image: postgres:16
+    container_name: auth-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: wave
+      POSTGRES_PASSWORD: Den1234567890/
+    ports:
+      - "5434:5432"
+    volumes:
+      - auth_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U auth_user -d auth_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   unleash:
     image: unleashorg/unleash-server:latest
@@ -97,7 +114,20 @@ services:
       NGROK_AUTHTOKEN: 2WXmuqkxIU6DbfUctoWa31SrKQ0_6oTqYhCS5rozNTsoojmHc
     ports:
       - "4040:4040"
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin_container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: wave@example.com
+      PGADMIN_DEFAULT_PASSWORD: Den1234567890/
+    ports:
+      - "9052:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
 volumes:
   refresh_token_storage_data:
   notification_db_data:
+  auth_db_data:
   single_use_links_data:
+  pgadmin_data:
