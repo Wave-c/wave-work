@@ -24,6 +24,18 @@ spring:
             - Path=/auth/**
             filters:
             - StripPrefix=1
+          - id: notification
+            uri: http://192.168.1.10:8077
+            predicates:
+            - Path=/notification/**
+            filters:
+            - StripPrefix=1
+          - id: work-service
+            uri: http://192.168.1.10:5017
+            predicates:
+            - Path=/work/**
+            filters:
+            - StripPrefix=1
           - id: telegram-api
             uri: https://api.telegram.org
             predicates:

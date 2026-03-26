@@ -1,8 +1,10 @@
 package com.wave.notification_service.services;
 
+import java.security.KeyException;
 import java.time.Duration;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.ReactiveRedisOperations;
 import org.springframework.data.redis.core.ReactiveValueOperations;
 import org.springframework.oxm.ValidationFailureException;
@@ -15,7 +17,7 @@ public class SingleUseLinkService {
     private final ReactiveValueOperations<String, String> valueOps;
 
     public SingleUseLinkService(
-        // @Qualifier("singleUseLinkRedisOperations")
+        @Qualifier("singleUseLinkOperations")
         ReactiveRedisOperations<String, String> ops) {
         valueOps = ops.opsForValue();
     }
@@ -25,7 +27,8 @@ public class SingleUseLinkService {
     }
 
     public Mono<String> getByKey(String key) {
-        return valueOps.get(key);
+        return valueOps.get(key)
+            .switchIfEmpty(Mono.error(new KeyException("Key not found")));
     }
 
     public Mono<Void> deleteByKey(String key) {

@@ -3,7 +3,8 @@ package com.wave.notification_service.components.senders;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import com.wave.notification_service.dtos.User;
+import com.wave.notification_service.models.NotificationChannel;
+import com.wave.notification_service.models.NotificationChannelType;
 
 import io.getunleash.Unleash;
 import io.getunleash.UnleashContext;
@@ -24,9 +25,13 @@ public class SmsSender implements INotificationSender {
     }
 
     @Override
-    public Mono<Void> send(User user, String message) {
+    public Mono<Void> send(NotificationChannel channel, String message) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'send'");
     }
 
+    @Override
+    public NotificationChannelType getChannelType() {
+        return NotificationChannelType.SMS;
+    }
 }

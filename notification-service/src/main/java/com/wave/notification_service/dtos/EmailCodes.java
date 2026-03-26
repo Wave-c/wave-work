@@ -1,14 +1,15 @@
 package com.wave.notification_service.dtos;
 
-import java.util.UUID;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
-    UUID id;
+@Accessors(chain = true)
+public class EmailCodes {
+    private String code;
+    private String email;
 }

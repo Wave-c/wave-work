@@ -5,7 +5,8 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-import com.wave.notification_service.dtos.User;
+import com.wave.notification_service.models.NotificationChannel;
+import com.wave.notification_service.models.NotificationChannelType;
 import com.wave.notification_service.services.BotService;
 
 import io.getunleash.Unleash;
@@ -29,11 +30,11 @@ public class TelegramSender implements INotificationSender {
     }
 
     @Override
-    public Mono<Void> send(User user, String message) {
+    public Mono<Void> send(NotificationChannel channel, String message) {
         log.info("Sending to telegram");
         return Mono.fromCallable(() -> {
             SendMessage send = SendMessage.builder()
-                .chatId(user.getTelegramChatId())
+                .chatId(channel.getValue())
                 .text(message)
                 .parseMode(ParseMode.HTML)
                 .build();
@@ -41,5 +42,10 @@ public class TelegramSender implements INotificationSender {
         })
         .subscribeOn(Schedulers.boundedElastic())
         .then();
+    }
+
+    @Override
+    public NotificationChannelType getChannelType() {
+        return NotificationChannelType.TELEGRAM;
     }
 }

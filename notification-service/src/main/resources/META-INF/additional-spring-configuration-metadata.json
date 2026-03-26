@@ -18,5 +18,25 @@
     "name": "telegram.webhook-secret-token",
     "type": "java.lang.String",
     "description": "A description for 'telegram.webhook-secret-token'"
+  },
+  {
+    "name": "spring.redis.single-use-link.host",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.redis.single-use-link.host'"
+  },
+  {
+    "name": "spring.redis.single-use-link.port",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.redis.single-use-link.port'"
+  },
+  {
+    "name": "spring.redis.email-codes.host",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.redis.email-codes.host'"
+  },
+  {
+    "name": "spring.redis.email-codes.port",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.redis.email-codes.port'"
   }
 ]}

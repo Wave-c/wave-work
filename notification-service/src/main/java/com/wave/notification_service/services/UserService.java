@@ -9,12 +9,17 @@ import com.wave.notification_service.models.NotificationChannelType;
 import com.wave.notification_service.repositories.NotificationChannelRepository;
 
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final NotificationChannelRepository notificationChannelRepository;
+
+    public Flux<NotificationChannel> getChannels(UUID userId) {
+        return notificationChannelRepository.getByUserId(userId);
+    }
 
     public Mono<Long> getTelegramChatId(UUID userId) {
         return notificationChannelRepository.getByUserIdAndType(
@@ -28,6 +33,18 @@ public class UserService {
                 .userId(userId)
                 .value(String.valueOf(telegramChatId))
                 .type(NotificationChannelType.TELEGRAM)
+                .verified(true)
+                .id(UUID.randomUUID())
+                .build()
+        ).then();
+    }
+
+    public Mono<Void> setEmail(UUID userId, String email) {
+        return notificationChannelRepository.save(
+            NotificationChannel.builder()
+                .userId(userId)
+                .value(email)
+                .type(NotificationChannelType.EMAIL)
                 .verified(true)
                 .id(UUID.randomUUID())
                 .build()
