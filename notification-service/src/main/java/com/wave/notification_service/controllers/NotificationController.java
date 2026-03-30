@@ -36,7 +36,7 @@ public class NotificationController {
             .thenReturn(ResponseEntity.ok("Notification sent successfully!"))
             .onErrorResume(err -> {
                 log.error(err.getMessage());
-                return Mono.just(ResponseEntity.status(500)
+                return Mono.just(ResponseEntity.status(204)
                     .body("Failed to send notification."));
                 });
     }
