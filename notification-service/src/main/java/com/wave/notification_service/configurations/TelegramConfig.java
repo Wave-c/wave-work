@@ -17,6 +17,8 @@ public class TelegramConfig {
     private String webhookPath;
     @Value("${telegram.webhook-secret-token}")
     private String webhookSecret;
+    @Value("${services.gateway-service.url}")
+    private String gatewayUrl;
 
     @Bean
     public BotService botService() {
@@ -28,7 +30,7 @@ public class TelegramConfig {
     @Bean
     public DefaultBotOptions defaultBotOptions() {
         DefaultBotOptions options = new DefaultBotOptions();
-        options.setBaseUrl("http://gateway-service.app.svc.cluster.local/telegram/bot");
+        options.setBaseUrl("%s/telegram/bot".formatted(gatewayUrl));
         return options;
     }
 }

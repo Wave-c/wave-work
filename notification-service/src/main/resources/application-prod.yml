@@ -51,6 +51,8 @@ services:
     url: http://matching-service.app.svc.cluster.local
   profile-service:
     url: http://profile-service.app.svc.cluster.local
+  gateway-service:
+    url: http://gateway-service.app.svc.cluster.local
   frontend-service:
     url: http://wave-work.site
 

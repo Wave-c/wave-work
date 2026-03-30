@@ -77,7 +77,7 @@ public class NotificationSenderService {
                         }))
                         .flatMap(channel -> sender.send(
                             channel,
-                            notification.getType().getMessage().formatted("some task")
+                            notification.getType().getMessage().formatted(notification.getTitle())
                         ));
                 });
             });

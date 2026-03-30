@@ -63,5 +63,10 @@
     "name": "services.profile-service.url",
     "type": "java.lang.String",
     "description": "A description for 'services.profile-service.url'"
+  },
+  {
+    "name": "services.gateway-service.url",
+    "type": "java.lang.String",
+    "description": "A description for 'services.gateway-service.url'"
   }
 ]}
