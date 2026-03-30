@@ -49,6 +49,10 @@ telegram:
 services:
   recomendation-service:
     url: http://matching-service.app.svc.cluster.local
+  profile-service:
+    url: http://profile-service.app.svc.cluster.local
+  frontend-service:
+    url: http://wave-work.site
 
 server:
   port: 8077
