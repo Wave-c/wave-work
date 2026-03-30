@@ -7,7 +7,7 @@ spring:
     url: jdbc:postgresql://auth-db.infra.svc.cluster.local:5432/auth_db
     locations: classpath:db/migration
     user: wave
-    password: Den1234567890/
+    password: Den1234567890
     enabled: true
   config:
     activate:
