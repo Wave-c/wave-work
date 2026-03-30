@@ -1,2 +1,57 @@
 server:
+  forward-headers-strategy: framework
   port: 8077
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://auth-service.app.svc.cluster.local/.well-known/jwks.json
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+          - id: auth
+            uri: auth-service.app.svc.cluster.local
+            predicates:
+            - Path=/auth/**
+            filters:
+            - StripPrefix=1
+          - id: notification
+            uri: notification-service.app.svc.cluster.local
+            predicates:
+            - Path=/notification/**
+            filters:
+            - StripPrefix=1
+          - id: work-service
+            uri: http://work-service.app.svc.cluster.local
+            predicates:
+            - Path=/work/**
+            filters:
+            - StripPrefix=1
+          - id: telegram-api
+            uri: https://api.telegram.org
+            predicates:
+            - Path=/telegram/**
+            filters:
+            - StripPrefix=1
+            - name: Retry
+              args:
+                retries: 5
+                statuses: BAD_GATEWAY, GATEWAY_TIMEOUT, SERVICE_UNAVAILABLE
+                methods: POST, GET
+                backoff:
+                  firstBackoff: 1s
+                  maxBackoff: 5s
+                  factor: 2
+          - id: telegram-webhook-inbound
+            uri: http://notification-service.app.svc.cluster.local
+            predicates:
+            - Path=/callback/message
+            - Method=POST
+            - Header=X-Telegram-Bot-Api-Secret-Token, 2168b7e4-a3f7-4bdd-8250-a03bd6df5c69

@@ -33,5 +33,10 @@
     "name": "spring.redis.refresh-token-storage.port",
     "type": "java.lang.String",
     "description": "A description for 'spring.redis.refresh-token-storage.port'"
+  },
+  {
+    "name": "services.profile-service.url",
+    "type": "java.lang.String",
+    "description": "A description for 'services.profile-service.url'"
   }
 ]}

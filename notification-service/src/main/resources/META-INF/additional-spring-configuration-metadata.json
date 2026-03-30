@@ -38,5 +38,30 @@
     "name": "spring.redis.email-codes.port",
     "type": "java.lang.String",
     "description": "A description for 'spring.redis.email-codes.port'"
+  },
+  {
+    "name": "spring.redis.user-state.host",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.redis.user-state.host'"
+  },
+  {
+    "name": "spring.redis.user-state.port",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.redis.user-state.port'"
+  },
+  {
+    "name": "services.recomendation-service.url",
+    "type": "java.lang.String",
+    "description": "A description for 'services.recomendation-service.url'"
+  },
+  {
+    "name": "services.frontend-service.url",
+    "type": "java.lang.String",
+    "description": "A description for 'services.frontend-service.url'"
+  },
+  {
+    "name": "services.profile-service.url",
+    "type": "java.lang.String",
+    "description": "A description for 'services.profile-service.url'"
   }
 ]}

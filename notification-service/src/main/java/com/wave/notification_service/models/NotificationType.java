@@ -1,10 +1,11 @@
 package com.wave.notification_service.models;
 
 public enum NotificationType {
-    LIKE("Вашу задача \"%s\" понравилась!"),
+    LIKE("Ваша задача \"%s\" понравилась!"),
     RESPOND("На вашу задачу \"%s\" откликнулись!"),
-    TASK_READY("Ваша задача готова"),
-    TASK_CANCELED("Задача отменена")
+    APPLICATION_APPROVED("Ваш отклик, на задачу \"%s\", принят"),
+    TASK_READY("Ваша задача, \"%s\" готова"),
+    TASK_CANCELED("Задача \"%s\" отменена")
     ;
 
     private final String message;

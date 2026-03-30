@@ -6,18 +6,19 @@ import org.springframework.web.server.ServerWebExchange;
 
 import com.wave.auth_service.dtos.LoginRequest;
 import com.wave.auth_service.dtos.RegistrationRequest;
+import com.wave.auth_service.helpers.ProfileWebClient;
 import com.wave.auth_service.services.JwtService;
 import com.wave.auth_service.services.RefreshTokenStorageService;
 import com.wave.auth_service.services.UserService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
+@Log4j2
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
@@ -34,9 +36,7 @@ public class AuthController {
     private final RefreshTokenStorageService refreshTokenStorageService;
     private final JwtService jwtService;
     private final UserService userService;
-
-    @Value("${spring.profiles.active:default}")
-    private String activeProfile;
+    private final ProfileWebClient profileWebClient;
 
     @PostMapping("/login")
     public Mono<ResponseEntity<Map<String, String>>> login(
@@ -53,7 +53,7 @@ public class AuthController {
                         .map(tupple -> {
                             ResponseCookie accessCookie =
                                 buildCookie("access_token", tupple.getT1(),
-                                    Duration.ofMinutes(15));
+                                    Duration.ofDays(1));
                             ResponseCookie refreshCookie =
                                 buildCookie("refresh_token", tupple.getT2(),
                                     Duration.ofDays(7));
@@ -79,8 +79,15 @@ public class AuthController {
         @RequestBody RegistrationRequest request,
         ServerWebExchange exchange) {
         return userService.registerUser(request)
+            .flatMap(authUser ->
+               profileWebClient.createProfile(authUser.getUserId(),
+               authUser.getUsername()))
             .then(login(new LoginRequest(request.getUsername(), request.getPassword()),
                 exchange))
+            .onErrorResume(err -> {
+                log.error(err);
+                return Mono.error(err);
+            })
             .onErrorReturn(ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(
                     Map.of("message",
@@ -94,6 +101,7 @@ public class AuthController {
             exchange.getRequest().getCookies().getFirst("refresh_token");
 
         if (refreshCookie == null) {
+            log.info("refresh");
             return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .build());
         }
@@ -137,14 +145,13 @@ public class AuthController {
     }
 
     private ResponseCookie buildCookie(String name, String value, Duration maxAge) {
-        ResponseCookieBuilder builder = ResponseCookie.from(name, value)
+        ResponseCookieBuilder builder = ResponseCookie.from(name)
             .path("/")
-            .sameSite("Strict")
+            .value(value)
+            .sameSite("None")
+            .secure(true)
+            .httpOnly(true)
             .maxAge(maxAge);
-
-        if ("prod".equals(activeProfile)) {
-            builder.secure(true).httpOnly(true);
-        }
 
         return builder.build();
     }

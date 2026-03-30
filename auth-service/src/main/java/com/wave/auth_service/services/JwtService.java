@@ -25,7 +25,7 @@ public class JwtService {
     private final RSAKey rsaKey;
     private final RefreshTokenStorageService refreshTokenStorage;
 
-    private static final Duration ACCESS_EXP = Duration.ofMinutes(15);
+    private static final Duration ACCESS_EXP = Duration.ofDays(1);
     private static final Duration REFRESH_EXP = Duration.ofDays(7);
 
     public Mono<String> generateAccessToken(UUID userId, List<String> roles) {

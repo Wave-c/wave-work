@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: single-use-links
+  namespace: infra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: single-use-links
+  template:
+    metadata:
+      labels:
+        app: single-use-links
+    spec:
+      containers:
+      - name: single-use-links
+        image: redis:7-alpine
+        args:
+          - "--appendonly"
+          - "yes"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 6379

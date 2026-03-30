@@ -1,2 +1,32 @@
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://auth-db.infra.svc.cluster.local:5432/auth_db
+    username: wave
+    password: Den1234567890
+  flyway:
+    url: jdbc:postgresql://auth-db.infra.svc.cluster.local:5432/auth_db
+    locations: classpath:db/migration
+    user: wave
+    password: Den1234567890/
+    enabled: true
+  config:
+    activate:
+      on-profile: prod
+  redis:
+    refresh-token-storage:
+      host: refresh-token-storage.infra.svc.cluster.local
+      port: 6379
+
+jwt:
+  private-key-file: keys/private.pem
+  public-key-file: keys/public.pem
+  issuer: https://wave-work.site
+  audience: gateway
+  token-expiration-seconds: 3600
+
+services:
+  profile-service:
+    url: http://profile-service.app.svc.cluster.local
+
 server:
   port: 8077

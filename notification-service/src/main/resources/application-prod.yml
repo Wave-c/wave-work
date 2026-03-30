@@ -1,0 +1,54 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+  r2dbc:
+    url: r2dbc:postgresql://notification-db:5432/notification_db
+    username: wave
+    password: Den1234567890
+  flyway:
+    url: jdbc:postgresql://notification-db:5432/notification_db
+    locations: classpath:db/migration
+    user: wave
+    password: Den1234567890
+    enabled: true
+  redis:
+    single-use-link:
+      host: single-use-links.infra.svc.cluster.local
+      port: 6379
+    email-codes:
+      host: email-codes.infra.svc.cluster.local
+      port: 6379
+    user-state:
+      host: user-state-storage.infra.svc.cluster.local
+      port: 6379
+  mail:
+    host: ${SMTP_SERVER}
+    port: ${SMTP_PORT}
+    username: ${SMTP_USERNAME}
+    password: ${SMTP_PASSWORD}
+    protocol: smtp
+    default-encoding: UTF-8
+    ssl:
+      enabled: true
+
+io:
+  getunleash:
+    api-token: ${UNLEASH_API_TOKEN}
+    api-url: http://my-unleash.default.svc.cluster.local:4242/api/
+    instance-id: ${random.uuid}
+    app-name: "notification-service"
+    synchronous-fetch-on-initialisation: true
+
+telegram:
+  token: ${TELEGRAM_TOKEN}
+  username: wave_work_bot
+  webhook-path: ${TELEGRAM_WEB_HOOK_PATH}
+  webhook-secret-token: ${TELEGRAM_WEB_HOOK_SECRET}
+
+services:
+  recomendation-service:
+    url: http://matching-service.app.svc.cluster.local
+
+server:
+  port: 8077

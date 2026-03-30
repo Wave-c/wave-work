@@ -1,7 +1,11 @@
 server:
+  forward-headers-strategy: framework
   port: 8080
 
 spring:
+  config:
+    activate:
+      on-profile: dev
   security:
     oauth2:
       resourceserver:
@@ -12,6 +16,22 @@ spring:
       server:
         webflux:
           routes:
+          - id: front
+            uri: http://192.168.1.10:9080
+            predicates:
+            - Path=/site/**
+            filters:
+            - StripPrefix=1
+          - id: front-static
+            uri: http://192.168.1.10:9080
+            predicates:
+            - Path=/static/**
+          - id: profile
+            uri: http://192.168.1.10:3001
+            predicates:
+            - Path=/profile/**
+            filters:
+            - StripPrefix=1
           - id: test
             uri: http://192.168.1.10:8099
             predicates:
@@ -34,6 +54,12 @@ spring:
             uri: http://192.168.1.10:5017
             predicates:
             - Path=/work/**
+            filters:
+            - StripPrefix=1
+          - id: proposal-service
+            uri: http://192.168.1.10:5211
+            predicates:
+            - Path=/proposal/**
             filters:
             - StripPrefix=1
           - id: telegram-api

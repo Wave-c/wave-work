@@ -6,6 +6,14 @@ services:
       - "6379:6379"
     volumes:
       - refresh_token_storage_data:/data
+
+  user-state-storage:
+    image: redis
+    container_name: user-state-storage
+    ports:
+      - "6352:6379"
+    volumes:
+      - user_state_storage_data:/data
   redis-commander:
     image: rediscommander/redis-commander:latest
     environment:
@@ -80,6 +88,60 @@ services:
       timeout: 5s
       retries: 5
 
+  recomendations-db:
+    image: postgres:16
+    container_name: recomendations-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: recommendation_service
+      POSTGRES_USER: wave
+      POSTGRES_PASSWORD: Den1234567890
+    ports:
+      - "5442:5432"
+    volumes:
+      - recommendation_service_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U auth_user -d auth_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  profile-service-db:
+    image: postgres:16
+    container_name: profile-service-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: profile_service
+      POSTGRES_USER: wave
+      POSTGRES_PASSWORD: Den1234567890
+    ports:
+      - "5452:5432"
+    volumes:
+      - profile_service_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U auth_user -d auth_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  proposal-service-db:
+    image: postgres:16
+    container_name: proposal-service-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: proposal_service
+      POSTGRES_USER: wave
+      POSTGRES_PASSWORD: Den1234567890
+    ports:
+      - "5492:5432"
+    volumes:
+      - proposal_service_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U auth_user -d auth_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   unleash:
     image: unleashorg/unleash-server:latest
     ports:
@@ -114,6 +176,15 @@ services:
     depends_on:
       - unleash
       - ssl-gen
+
+  nginx-proxy-gateway:
+    image: nginx:alpine
+    ports:
+      - "31080:80"
+      - "31443:443"
+    volumes:
+      - ./nginx/proxy.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
 
   single-use-links:
     image: redis:latest
@@ -151,6 +222,15 @@ services:
       - "9052:80"
     volumes:
       - pgadmin_data:/var/lib/pgadmin
+
+  front:
+    image: wave1/wave-work-front
+    container_name: wave-work-front
+    ports:
+      - "9443:443"
+      - "9080:80"
+    volumes:
+      - ./nginx/ssl:/etc/nginx/ssl:ro
 volumes:
   refresh_token_storage_data:
   notification_db_data:
@@ -159,3 +239,7 @@ volumes:
   pgadmin_data:
   WorkServiceDb:
   email_codes_data:
+  user_state_storage_data:
+  recommendation_service_data:
+  profile_service_data:
+  proposal_service_data:

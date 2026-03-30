@@ -3,6 +3,7 @@ package com.wave.notification_service.controllers;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wave.notification_service.dtos.CodeDto;
 import com.wave.notification_service.services.EmailCodesService;
 import com.wave.notification_service.services.SingleUseLinkService;
 import com.wave.notification_service.services.UserService;
@@ -63,11 +64,11 @@ public class BindNotificationChannelController {
     @PostMapping("/confirm-email-code")
     public Mono<ResponseEntity<Boolean>> confirmEmailCode(
         @RequestHeader("X-User-Id") UUID userId,
-        @RequestBody String code) {
+        @RequestBody CodeDto code) {
         log.info("verify code {} for user {}", code, userId);
         return emailCodesService.getByKey(userId.toString())
             .flatMap(correctCode -> {
-                if (correctCode.getCode().contentEquals(code)) {
+                if (correctCode.getCode().contentEquals(code.getCode())) {
                     log.info(true);
                     return userService.setEmail(userId, correctCode.getEmail())
                         .thenReturn(ResponseEntity.ok(true));
@@ -76,7 +77,7 @@ public class BindNotificationChannelController {
                 }
             })
             .onErrorResume(RuntimeException.class, e ->
-                Mono.just(ResponseEntity.badRequest().body(false)))
+                Mono.just(ResponseEntity.internalServerError().body(false)))
             .switchIfEmpty(Mono.just(ResponseEntity.badRequest().body(false)));
     }
 

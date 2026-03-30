@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Notification {
     private NotificationType type;
+    private String title;
     private User recipient;
 }

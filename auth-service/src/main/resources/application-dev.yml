@@ -1,4 +1,5 @@
 spring:
+
   r2dbc:
     url: r2dbc:postgresql://192.168.1.10:5434/auth_db
     username: wave
@@ -11,8 +12,7 @@ spring:
     enabled: true
   config:
     activate:
-      on-profile:
-      - dev
+      on-profile: dev
   redis:
     refresh-token-storage:
       host: 192.168.1.10
@@ -27,3 +27,7 @@ jwt:
   issuer: http://192.168.1.10:8081
   audience: gateway
   token-expiration-seconds: 3600
+
+services:
+  profile-service:
+    url: http://192.168.1.10:3001

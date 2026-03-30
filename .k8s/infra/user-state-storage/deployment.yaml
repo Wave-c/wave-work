@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-state-storage
+  namespace: infra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-state-storage
+  template:
+    metadata:
+      labels:
+        app: user-state-storage
+    spec:
+      containers:
+      - name: user-state-storage
+        image: redis:7-alpine
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 6379

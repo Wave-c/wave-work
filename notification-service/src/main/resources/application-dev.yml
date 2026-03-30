@@ -1,0 +1,58 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  r2dbc:
+    url: r2dbc:postgresql://192.168.1.10:5433/notification_db
+    username: wave
+    password: 'Den1234567890/'
+  flyway:
+    url: jdbc:postgresql://192.168.1.10:5433/notification_db
+    locations: classpath:db/migration
+    user: wave
+    password: 'Den1234567890/'
+    enabled: true
+  redis:
+    single-use-link:
+      host: 192.168.1.10
+      port: 6376
+    email-codes:
+      host: 192.168.1.10
+      port: 6377
+    user-state:
+      host: 192.168.1.10
+      port: 6352
+  mail:
+    host: smtp.ya.ru
+    port: 465
+    username: den200755@yandex.ru
+    password: anblwqgwymmvffxq
+    protocol: smtp
+    default-encoding: UTF-8
+    ssl:
+      enabled: true
+
+io:
+  getunleash:
+    api-token: "*:*.default-token"
+    api-url: http://192.168.1.10:4242/api/
+    instance-id: ${random.uuid}
+    app-name: "notification-service"
+    synchronous-fetch-on-initialisation: true
+
+telegram:
+  token: 8564756319:AAEB7-V723UjxBTuAcVxTEyksIHh8PlgYSg
+  username: wave_work_bot
+  webhook-path: https://82fd-192-124-209-165.ngrok-free.app/
+  webhook-secret-token: 2168b7e4-a3f7-4bdd-8250-a03bd6df5c69
+
+services:
+  recomendation-service:
+    url: http://192.168.1.10:3002
+  profile-service:
+    url: http://192.168.1.10:3001
+  frontend-service:
+    url: https://wave-work.site
+
+server:
+  port: 8077

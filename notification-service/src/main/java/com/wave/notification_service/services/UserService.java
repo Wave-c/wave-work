@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.wave.notification_service.components.web.ProfileWebClient;
 import com.wave.notification_service.models.NotificationChannel;
 import com.wave.notification_service.models.NotificationChannelType;
 import com.wave.notification_service.repositories.NotificationChannelRepository;
@@ -16,6 +17,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class UserService {
     private final NotificationChannelRepository notificationChannelRepository;
+    private final ProfileWebClient profileWebClient;
 
     public Flux<NotificationChannel> getChannels(UUID userId) {
         return notificationChannelRepository.getByUserId(userId);
@@ -48,6 +50,6 @@ public class UserService {
                 .verified(true)
                 .id(UUID.randomUUID())
                 .build()
-        ).then();
+        ).then(profileWebClient.setEmail(userId, email));
     }
 }

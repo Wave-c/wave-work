@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-service
+  namespace: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway-service
+  template:
+    metadata:
+      labels:
+        app: gateway-service
+    spec:
+      containers:
+        - name: gateway-service
+          image: wave1/wave-work-gateway-service
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 8077
+
+          env:
+            - name: JAVA_TOOL_OPTIONS
+              value: >
+                -XX:+UseG1GC
+                -XX:MaxRAMPercentage=40
+                -XX:InitialRAMPercentage=30
+                -XX:MaxDirectMemorySize=96m
+                -XX:MaxMetaspaceSize=96m
+                -Xss256k
+                -XX:+ExitOnOutOfMemoryError
+                -Dio.netty.allocator.maxOrder=7
+                -Dio.netty.allocator.numDirectArenas=2
+                -Dio.netty.allocator.numHeapArenas=2
+                -Dio.netty.maxDirectMemory=96m
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8077
+            initialDelaySeconds: 20
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8077
+            initialDelaySeconds: 40
+            periodSeconds: 20
