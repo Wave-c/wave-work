@@ -17,13 +17,13 @@ spring:
         webflux:
           routes:
           - id: auth
-            uri: auth-service.app.svc.cluster.local
+            uri: http://auth-service.app.svc.cluster.local
             predicates:
             - Path=/auth/**
             filters:
             - StripPrefix=1
           - id: notification
-            uri: notification-service.app.svc.cluster.local
+            uri: http://notification-service.app.svc.cluster.local
             predicates:
             - Path=/notification/**
             filters:
