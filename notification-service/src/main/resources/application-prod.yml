@@ -3,11 +3,11 @@ spring:
     activate:
       on-profile: prod
   r2dbc:
-    url: r2dbc:postgresql://notification-db:5432/notification_db
+    url: r2dbc:postgresql://notification-db.infra.svc.cluster.local:5432/notification_db
     username: wave
     password: Den1234567890
   flyway:
-    url: jdbc:postgresql://notification-db:5432/notification_db
+    url: jdbc:postgresql://notification-db.infra.svc.cluster.local:5432/notification_db
     locations: classpath:db/migration
     user: wave
     password: Den1234567890
