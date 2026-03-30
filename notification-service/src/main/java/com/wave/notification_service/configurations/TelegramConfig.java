@@ -28,7 +28,7 @@ public class TelegramConfig {
     @Bean
     public DefaultBotOptions defaultBotOptions() {
         DefaultBotOptions options = new DefaultBotOptions();
-        options.setBaseUrl("http://192.168.1.10:8080/telegram/bot");
+        options.setBaseUrl("http://gateway-service.app.svc.cluster.local/telegram/bot");
         return options;
     }
 }

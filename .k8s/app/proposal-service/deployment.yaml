@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: app
+  name: proposal-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: proposal-service
+  template:
+    metadata:
+      labels:
+        app: proposal-service
+    spec:
+      containers:
+        - name: proposal-service
+          image: wave1/wave-work-proposal-service
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+            - name: ASPNETCORE_URLS
+              value: http://+:8080

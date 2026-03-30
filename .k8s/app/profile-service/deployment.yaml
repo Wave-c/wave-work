@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: app
+  name: profile-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: profile-service
+  template:
+    metadata:
+      labels:
+        app: profile-service
+    spec:
+      containers:
+        - name: profile-service
+          image: wave1/wave-work-profile-service
+          ports:
+            - containerPort: 8077
+
+          env:
+            # production режим
+            - name: NODE_ENV
+              value: production
+
+            # строка подключения к БД
+            - name: DATABASE_URL
+              value: postgresql://wave:Den1234567890@user-profile-db.infra.svc.cluster.local:5432/user_profile_db?schema=public
