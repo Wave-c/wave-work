@@ -18,8 +18,8 @@ spring:
       port: 6379
 
 jwt:
-  private-key-file: classpath://keys/private.pem
-  public-key-file: classpath://keys/public.pem
+  private-key-file: file:/app/keys/private.pem
+  public-key-file: file:/app/keys/public.pem
   issuer: https://wave-work.site
   audience: gateway
   token-expiration-seconds: 3600

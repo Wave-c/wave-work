@@ -13,10 +13,19 @@ spec:
       labels:
         app: auth-service
     spec:
+      volumes:
+        - name: keys-volume
+          secret:
+            secretName: jwt-keys
       containers:
         - name: auth-service
           image: wave1/wave-work-auth-service
           imagePullPolicy: Always
+
+          volumeMounts:
+            - name: keys-volume
+              mountPath: "/app/keys"
+              readOnly: true
 
           ports:
             - containerPort: 8077
