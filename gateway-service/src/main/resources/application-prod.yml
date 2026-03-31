@@ -40,6 +40,12 @@ spring:
             - Path=/work/**
             filters:
             - StripPrefix=1
+          - id: proposal-service
+            uri: http://proposal-service.app.svc.cluster.local
+            predicates:
+            - Path=/proposal/**
+            filters:
+            - StripPrefix=1
           - id: telegram-api
             uri: https://api.telegram.org
             predicates:
