@@ -10,9 +10,11 @@ import com.wave.notification_service.models.NotificationChannelType;
 import com.wave.notification_service.repositories.NotificationChannelRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -38,7 +40,14 @@ public class UserService {
                 .verified(true)
                 .id(UUID.randomUUID())
                 .build()
-        ).then();
+        ).doOnNext(tmp -> {
+            log.info(tmp);
+        })
+        .onErrorResume(err -> {
+            log.error(err);
+            return Mono.error(err);
+        })
+        .then();
     }
 
     public Mono<Void> setEmail(UUID userId, String email) {
