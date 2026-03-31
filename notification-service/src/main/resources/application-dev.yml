@@ -43,7 +43,7 @@ io:
 telegram:
   token: 8564756319:AAEB7-V723UjxBTuAcVxTEyksIHh8PlgYSg
   username: wave_work_bot
-  webhook-path: https://82fd-192-124-209-165.ngrok-free.app/
+  webhook-path: https://8234-192-124-209-165.ngrok-free.app/
   webhook-secret-token: 2168b7e4-a3f7-4bdd-8250-a03bd6df5c69
 
 services:

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: app
+  name: recomendation-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: recomendation-service
+  template:
+    metadata:
+      labels:
+        app: recomendation-service
+    spec:
+      containers:
+        - name: recomendation-service
+          image: wave1/wave-work-recomendation-service
+          ports:
+            - containerPort: 8077
+
+          env:
+            # production режим
+            - name: NODE_ENV
+              value: production
+
+            # строка подключения к БД
+            - name: DATABASE_URL
+              value: postgresql://wave:Den1234567890@recomendation-service-db.infra.svc.cluster.local:5432/recomendation_service_db?schema=public

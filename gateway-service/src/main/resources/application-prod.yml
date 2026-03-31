@@ -28,6 +28,12 @@ spring:
             - Path=/notification/**
             filters:
             - StripPrefix=1
+          - id: profile
+            uri: http://192.168.1.10:3001
+            predicates:
+            - Path=/profile/**
+            filters:
+            - StripPrefix=1
           - id: work-service
             uri: http://work-service.app.svc.cluster.local
             predicates:
