@@ -42,7 +42,7 @@ public class StartCommand implements ICommand{
                 .then();
         }
         return singleUseLinkService.getByKey(parts[1])
-            .flatMap(userId -> Mono.zip(
+            .flatMap(userId -> Mono.when(
                 userService.setTelegramChatId(
                     UUID.fromString(userId),
                     message.getChatId()),
