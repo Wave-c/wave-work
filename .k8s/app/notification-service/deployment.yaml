@@ -50,7 +50,7 @@ spec:
             - name: TELEGRAM_TOKEN
               value: 8564756319:AAEB7-V723UjxBTuAcVxTEyksIHh8PlgYSg
             - name: TELEGRAM_WEB_HOOK_PATH
-              value: https://wave-work.site/
+              value: https://wave-work.site/api
             - name: TELEGRAM_WEB_HOOK_SECRET
               value: 2168b7e4-a3f7-4bdd-8250-a03bd6df5c69
 

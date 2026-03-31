@@ -48,7 +48,7 @@ telegram:
 
 services:
   recomendation-service:
-    url: http://matching-service.app.svc.cluster.local
+    url: http://recomendation-service.app.svc.cluster.local
   profile-service:
     url: http://profile-service.app.svc.cluster.local
   gateway-service:
