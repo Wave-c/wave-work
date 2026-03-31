@@ -40,7 +40,8 @@ public class UserService {
                 .verified(true)
                 .id(UUID.randomUUID())
                 .build()
-        ).doOnNext(tmp -> {
+        ).switchIfEmpty(Mono.error(new RuntimeException("Failed to save telegram chat id")))
+        .doOnNext(tmp -> {
             log.info(tmp);
         })
         .onErrorResume(err -> {

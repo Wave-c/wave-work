@@ -27,3 +27,7 @@ spec:
             # строка подключения к БД
             - name: DATABASE_URL
               value: postgresql://wave:Den1234567890@recomendation-service-db.infra.svc.cluster.local:5432/recomendation_service_db?schema=public
+            - name: PROFILE_SERVICE_BASE_URL
+              value: http://profile-service.app.svc.cluster.local/
+            - name: JOBS_SERVICE_BASE_URL
+              value: http://work-service.app.svc.cluster.local/
